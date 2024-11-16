@@ -36,4 +36,6 @@ public class Book {
 
     @Column(name = "language")
     private String language;
+
+    private String add;
 }
