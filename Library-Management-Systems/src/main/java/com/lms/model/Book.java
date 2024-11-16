@@ -8,7 +8,8 @@ import lombok.Setter;
 
 import java.time.ZonedDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -37,5 +38,4 @@ public class Book {
     @Column(name = "language")
     private String language;
 
-    private String add1;
 }
