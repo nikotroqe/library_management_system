@@ -1,7 +1,8 @@
 package com.lms.service.impl;
 
+import com.lms.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceImpl {
+public class UserServiceImpl implements UserService {
 }

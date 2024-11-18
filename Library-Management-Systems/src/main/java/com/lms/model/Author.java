@@ -1,5 +1,6 @@
 package com.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,7 +33,8 @@ public class Author {
 	private String nationality;
     @Column(name = "createdDate")
 	private ZonedDateTime createdDate;
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy="author")
-    private Book book;
+    @OneToMany(orphanRemoval = true, mappedBy="author")
+    @JsonIgnore
+    private List<Book> books;
 
 }

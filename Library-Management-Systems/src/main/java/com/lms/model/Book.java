@@ -26,7 +26,7 @@ public class Book {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @JoinColumn(name = "author_id", referencedColumnName = "authorId")
     private Author author;
 
     @Column(name = "createdDate")
