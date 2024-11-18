@@ -1,5 +1,6 @@
 package com.lms.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "authorId")
+    @JsonIgnore
     private Author author;
 
     @Column(name = "createdDate")
