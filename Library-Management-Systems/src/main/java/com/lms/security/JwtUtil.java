@@ -1,11 +1,16 @@
 package com.lms.security;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 
 @Component
@@ -39,8 +44,13 @@ public class JwtUtil{
         return extractExpiration(token).before(new Date());
     }
 
+    public String generateToken(UserDetails userDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, userDetails);
+    }
+
     public String generateToken(UserDetails userDetails, Map<String, Object> claims){
-        return createToken(claims);
+        return createToken(claims, userDetails);
     }
 
     public String createToken(Map<String, Object> claims, UserDetails userDetails){
@@ -49,7 +59,7 @@ public class JwtUtil{
                 .claim("authorities", userDetails.getAuthorities())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
-                .signWith(SignatureAlgorithm.HS256, jwtSigningKey).commpact();
+                .signWith(SignatureAlgorithm.HS256, jwtSigningKey).compact();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails){

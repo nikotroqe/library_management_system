@@ -1,5 +1,6 @@
 package com.lms.security;
 
+import com.lms.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.collection.spi.CollectionSemantics;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
@@ -39,23 +40,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
         private final JwtFilter jwtFilter;
-        private final static List<UserDetails> APPLICATION_USERS = Arrays.asList(
-          new User(
-                  "troqeniko@gmail.com",
-                  "password",
-                  Collections.singleton(new SimpleGrantedAuthority("ROLE_USER"))
-          ),
-          new User(
-                  "niko@gmail.com",
-                  "password",
-                  Collections.singleton(new SimpleGrantedAuthority("ROLE_ADMIN"))
-          )
-        );
+        private final UserDao userDao;
 
          @Bean
          public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
             http
+                    .csrf().disable()
                     .authorizeRequests()
+                    //.antMatchers("/**/auth/**")
+                    //.permitAll()
                     .anyRequest()
                     .authenticated()
                     .and()
@@ -63,7 +56,7 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
                     .authenticationProvider(authenticationProvider())
-                    .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     ;
             return http.build();
          }
@@ -90,14 +83,9 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return APPLICATION_USERS
-                        .stream()
-                        .filter(u -> u.getUsername().equals(email))
-                        .findFirst()
-                        .orElseThrow(() -> new UsernameNotFoundException("No user was found"))
-                        ;
+            public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+                return userDao.findUserByEmail(email);
             }
-        }
+        };
     }
 }

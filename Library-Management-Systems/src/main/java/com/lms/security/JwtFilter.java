@@ -1,5 +1,6 @@
 package com.lms.security;
 
+import com.lms.dao.UserDao;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -23,7 +24,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
-   //private final UserDetailsService userDetailsService;
+    private final UserDao userDao;
     private final JwtUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -40,7 +41,7 @@ public class JwtFilter extends OncePerRequestFilter {
         jwtToken = authHeader.substring(7);
         userEmail = jwtUtil.extractUsername(jwtToken);
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = useDao.loadUserByUsername(userEmail);
+            UserDetails userDetails = userDao.findUserByEmail(userEmail);
 
             if (jwtUtil.isTokenValid(jwtToken, userDetails)){
                 UsernamePasswordAuthenticationToken authToken =
