@@ -1,14 +1,12 @@
 package com.lms.security;
 
-import com.lms.model.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.security.Signature;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
+
 
 @Component
 public class JwtUtil{
