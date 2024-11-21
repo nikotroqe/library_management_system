@@ -1,29 +1,62 @@
 package com.lms.security;
 
 import com.lms.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
+import java.security.Signature;
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 @Component
-public class JwtUtil implements Serializable {
-    /*private final String secretKey = "your-secret-key"; // duhet të jetë një çelës i sigurt
+public class JwtUtil{
 
-    public String generateToken(User user) {
-        return Jwts.builder()
-                .setSubject(user.getUsername())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 ditë
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+    private String jwtSigningKey = "secret";
+
+    public String extractUsername(String token){
+        return extractClaim(token, Claims::getSubject);
     }
 
-    public String extractUsername(String token) {
-        return Jwts.parser()
-                .setSigningKey(secretKey)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
-    }*/
+    public Date extractExpiration(String token){
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public boolean hasClaim(String token, String claimName){
+        final Claims claims =extractAllClaims(token);
+        return claims.get(claimName) != null;
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver){
+        final Claims claims =extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token){
+        return Jwts.parser().setSigningKey(jwtSigningKey).parseClaimsJws(token).getBody();
+    }
+
+    public boolean isTokenExpired(String token){
+        return extractExpiration(token).before(new Date());
+    }
+
+    public String generateToken(UserDetails userDetails, Map<String, Object> claims){
+        return createToken(claims);
+    }
+
+    public String createToken(Map<String, Object> claims, UserDetails userDetails){
+        return Jwts.builder().setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .claim("authorities", userDetails.getAuthorities())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)))
+                .signWith(SignatureAlgorithm.HS256, jwtSigningKey).commpact();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails){
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
 }
