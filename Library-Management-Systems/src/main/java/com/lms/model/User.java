@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.access.annotation.Secured;
 
 import java.time.ZonedDateTime;
 
@@ -28,6 +27,8 @@ public class User {
     private String surname;
     @Column(name = "username")
     private String username;
+    @Column(name = "password")
+    private String password;
     @Column(name = "createdDate")
     private ZonedDateTime createdDate;
 

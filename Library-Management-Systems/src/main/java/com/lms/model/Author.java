@@ -37,4 +37,13 @@ public class Author {
     @JsonIgnore
     private List<Book> books;
 
+    public Author(long authorId, String name, String surname, Date birthdate, String birthplace, String nationality, ZonedDateTime createdDate) {
+        this.authorId = authorId;
+        this.name = name;
+        this.surname = surname;
+        this.birthdate = birthdate;
+        this.birthplace = birthplace;
+        this.nationality = nationality;
+        this.createdDate = createdDate;
+    }
 }

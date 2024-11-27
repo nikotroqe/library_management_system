@@ -36,4 +36,10 @@ public class UserController {
         userService.deleteUserById(userId);
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestParam String username, @RequestParam String password) {
+        userService.registerUser(username, password);
+        return ResponseEntity.ok("User registered successfully");
+    }
 }

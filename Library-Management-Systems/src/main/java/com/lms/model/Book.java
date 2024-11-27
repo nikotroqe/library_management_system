@@ -40,4 +40,7 @@ public class Book {
     @Column(name = "language")
     private String language;
 
+    public Book(long bookId, String name, String description, ZonedDateTime createdDate, ZonedDateTime modifiedDate, String language) {
+
+    }
 }

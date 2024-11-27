@@ -3,11 +3,14 @@ package com.lms.service.impl;
 import com.lms.model.Author;
 import com.lms.repository.AuthorRepository;
 import com.lms.service.AuthorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
+
     @Autowired
     private AuthorRepository authorRepository;
 
