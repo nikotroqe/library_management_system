@@ -20,7 +20,7 @@ public class AuthController {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
     @Autowired
-    private JwtUtil jwtUtil;
+    private  JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) throws AuthenticationException {

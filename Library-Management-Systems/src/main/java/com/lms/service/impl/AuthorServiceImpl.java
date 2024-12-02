@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
@@ -17,6 +19,11 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author createAuthor(Author author) {
         return authorRepository.save(author);
+    }
+
+    @Override
+    public List<Author> getAllAuthor() {
+        return authorRepository.findAll();
     }
 
     @Override

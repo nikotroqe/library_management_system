@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/author")
 public class AuthorController {
@@ -20,6 +22,11 @@ public class AuthorController {
     public ResponseEntity<Author> createAuthor(@RequestBody Author author){
         Author createdAuthor = authorService.createAuthor(author);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAuthor);
+    }
+
+    @GetMapping
+    public List<Author> getAllAuthor() {
+        return authorService.getAllAuthor();
     }
 
     @GetMapping("/{authorId}")
